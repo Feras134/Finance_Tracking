@@ -552,6 +552,5 @@ def upload_csv():
 
 if __name__ == '__main__':
     init_db()
-    # Production-ready configuration
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
     app.run(debug=debug_mode, host='127.0.0.1', port=5000) 
