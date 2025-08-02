@@ -113,20 +113,7 @@ The system automatically categorizes transactions based on keywords:
 - **Education**: book, course, tuition, school, college, university
 - **Travel**: hotel, flight, airbnb, vacation, trip, booking
 
-## Project Structure
 
-```
-personal-finance-tracker/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Python dependencies
-├── README.md             # Project documentation
-├── finance.db            # SQLite database (created automatically)
-├── templates/
-│   └── index.html        # Main HTML template
-└── static/
-    ├── style.css         # CSS styles
-    └── script.js         # JavaScript functionality
-```
 
 ## API Endpoints
 
@@ -200,18 +187,3 @@ The application uses a simple but effective NLP-based classification system:
 - Safari 12+
 - Edge 79+
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For issues, questions, or contributions, please open an issue on the project repository. 
