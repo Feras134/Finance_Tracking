@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <div class="nav-menu" id="nav-menu">
+                <div class="nav-item" id="nav-dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" id="nav-transactions">
+                    <i class="fas fa-list"></i>
+                    <span>Transactions</span>
+                </div>
+                <div class="nav-item" id="nav-add">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Transaction</span>
+                </div>
+                <div class="nav-item" id="nav-upload">
+                    <i class="fas fa-upload"></i>
+                    <span>Import CSV</span>
+                </div>
+                <div class="nav-item" id="nav-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login/Register Section -->
+    <div id="auth-section" class="auth-section">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="login-tab">Login</button>
+                <button class="auth-tab" id="register-tab">Register</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app-section" class="app-section hidden">
+        <!-- Dashboard -->
+        <div id="dashboard" class="page active">
+            <div class="container">
+                <h1 class="page-title">Financial Dashboard</h1>
+                
+                <!-- Summary Cards -->
+                <div class="summary-cards">
+                    <div class="summary-card income">
+                        <div class="card-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Income</h3>
+                            <p id="total-income">$0.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card expense">
+                        <div class="card-icon">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total Expenses</h3>
+                            <p id="total-expenses">$0.00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card balance">
+                        <div class="card-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Net Income</h3>
+                            <p id="net-income">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3>Spending by Category</h3>
+                        <canvas id="category-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Monthly Overview</h3>
+                        <canvas id="monthly-chart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Insights Section -->
+                <div class="insights-section">
+                    <h3>Financial Insights</h3>
+                    <div id="insights-container" class="insights-container">
+                        <!-- Insights will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transactions -->
+        <div id="transactions" class="page">
+            <div class="container">
+                <h1 class="page-title">Transactions</h1>
+                
+                <div class="transactions-header">
+                    <div class="filters">
+                        <select id="type-filter">
+                            <option value="">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                        <select id="category-filter">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="transactions-list" id="transactions-list">
+                    <!-- Transactions will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Transaction -->
+        <div id="add-transaction" class="page">
+            <div class="container">
+                <h1 class="page-title">Add Transaction</h1>
+                
+                <form id="transaction-form" class="transaction-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" step="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select id="type" required>
+                                <option value="">Select Type</option>
+                                <option value="income">Income</option>
+                                <option value="expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category (Auto-detected)</label>
+                        <input type="text" id="category" readonly>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Add Transaction</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Upload CSV -->
+        <div id="upload-csv" class="page">
+            <div class="container">
+                <h1 class="page-title">Import Transactions</h1>
+                
+                <div class="upload-section">
+                    <div class="upload-instructions">
+                        <h3>Upload CSV File</h3>
+                        <p>Upload a CSV file with the following columns:</p>
+                        <ul>
+                            <li><strong>Description</strong> - Transaction description</li>
+                            <li><strong>Amount</strong> - Transaction amount</li>
+                            <li><strong>Type</strong> - "income" or "expense"</li>
+                            <li><strong>Date</strong> - Transaction date (YYYY-MM-DD)</li>
+                        </ul>
+                        <p><strong>Note:</strong> The first row should contain headers.</p>
+                    </div>
+                    
+                    <form id="upload-form" class="upload-form">
+                        <div class="file-upload">
+                            <input type="file" id="csv-file" accept=".csv" required>
+                            <label for="csv-file" class="file-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose CSV file</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload File</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification hidden">
+        <span id="notification-message"></span>
+        <button id="notification-close" class="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
